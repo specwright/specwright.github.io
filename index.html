@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Specwright - AI-Powered PRD Generation</title>
+    <meta name="description" content="Create high-quality Product Requirements Documents with AI-guided interviews, intelligent review, and portfolio-scale analytics.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0b;
+            --bg-secondary: #111113;
+            --bg-tertiary: #18181b;
+            --text-primary: #fafafa;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --accent: #6366f1;
+            --accent-hover: #818cf8;
+            --accent-glow: rgba(99, 102, 241, 0.4);
+            --border: #27272a;
+            --success: #22c55e;
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 16px 0;
+            background: rgba(10, 10, 11, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            z-index: 100;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent), #a855f7);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            box-shadow: 0 0 24px var(--accent-glow);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--text-muted);
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 0 80px;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 800px;
+            height: 500px;
+            background: radial-gradient(ellipse at center, var(--accent-glow) 0%, transparent 70%);
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--accent), #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Terminal Preview */
+        .terminal {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-top: 60px;
+            overflow: hidden;
+            text-align: left;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .terminal-dot.red { background: #ff5f57; }
+        .terminal-dot.yellow { background: #febc2e; }
+        .terminal-dot.green { background: #28c840; }
+
+        .terminal-title {
+            flex: 1;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .terminal-body {
+            padding: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.8;
+        }
+
+        .terminal-line {
+            display: flex;
+            gap: 12px;
+        }
+
+        .terminal-prompt {
+            color: var(--accent);
+        }
+
+        .terminal-command {
+            color: var(--text-primary);
+        }
+
+        .terminal-output {
+            color: var(--text-secondary);
+            padding-left: 24px;
+        }
+
+        .terminal-success {
+            color: var(--success);
+        }
+
+        /* Features */
+        .features {
+            padding: 120px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 16px;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+
+        .section-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent), #a855f7);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Workflow */
+        .workflow {
+            padding: 120px 0;
+            background: var(--bg-secondary);
+        }
+
+        .workflow-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 32px;
+            margin-top: 64px;
+        }
+
+        .workflow-step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 56px;
+            height: 56px;
+            background: var(--bg-primary);
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 0 auto 20px;
+        }
+
+        .workflow-step h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .workflow-step p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Fleet */
+        .fleet {
+            padding: 120px 0;
+        }
+
+        .fleet-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            max-width: 800px;
+            margin: 48px auto 0;
+        }
+
+        .fleet-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.95rem;
+        }
+
+        .fleet-item-icon {
+            color: var(--accent);
+            font-size: 1.1rem;
+        }
+
+        /* CTA */
+        .cta {
+            padding: 120px 0;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+
+        .cta h2 {
+            margin-bottom: 24px;
+        }
+
+        .cta p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .install-code {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 24px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            margin-top: 24px;
+        }
+
+        .install-code code {
+            color: var(--text-primary);
+        }
+
+        .copy-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+            transition: color 0.2s;
+        }
+
+        .copy-btn:hover {
+            color: var(--text-primary);
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        footer p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding-top: 100px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .fleet-features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <a href="#" class="logo">
+                <div class="logo-icon">S</div>
+                Specwright
+            </a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#workflow">How it works</a>
+                <a href="#fleet">Fleet Management</a>
+                <a href="https://github.com/specwright/specwright" class="btn btn-secondary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    GitHub
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="badge">
+                    <span class="badge-dot"></span>
+                    AI-Powered Documentation
+                </div>
+                <h1>Write PRDs that <span class="gradient-text">actually ship</span></h1>
+                <p class="hero-description">
+                    Specwright guides you through creating comprehensive Product Requirements Documents with AI-powered interviews, intelligent review, and portfolio-scale analytics.
+                </p>
+                <div class="hero-buttons">
+                    <a href="https://github.com/specwright/specwright" class="btn btn-primary">
+                        Get Started
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                    <a href="#features" class="btn btn-secondary">See Features</a>
+                </div>
+
+                <div class="terminal">
+                    <div class="terminal-header">
+                        <span class="terminal-dot red"></span>
+                        <span class="terminal-dot yellow"></span>
+                        <span class="terminal-dot green"></span>
+                        <span class="terminal-title">Terminal</span>
+                    </div>
+                    <div class="terminal-body">
+                        <div class="terminal-line">
+                            <span class="terminal-prompt">$</span>
+                            <span class="terminal-command">specwright new --template standard-prd</span>
+                        </div>
+                        <div class="terminal-output">
+                            Starting guided interview for "User Authentication"...
+                        </div>
+                        <div class="terminal-output">
+                            <span class="terminal-success">&#10003;</span> Problem statement captured
+                        </div>
+                        <div class="terminal-output">
+                            <span class="terminal-success">&#10003;</span> Success metrics defined
+                        </div>
+                        <div class="terminal-output">
+                            <span class="terminal-success">&#10003;</span> Solution approach documented
+                        </div>
+                        <div class="terminal-output" style="margin-top: 8px;">
+                            PRD generated: <span style="color: var(--accent);">docs/auth-prd.md</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <p class="section-label">Features</p>
+                <h2>Everything you need for great PRDs</h2>
+                <p class="section-description">
+                    From initial idea capture to CPO-level review, Specwright covers the entire PRD lifecycle.
+                </p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">&#128172;</div>
+                    <h3>Guided Interviews</h3>
+                    <p>AI-driven interviews systematically capture requirements, ensuring you don't miss critical details. Dynamic follow-up questions adapt to your responses.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">&#128196;</div>
+                    <h3>Multiple Templates</h3>
+                    <p>Choose from One-Pagers for quick validation, Standard PRDs for full specifications, or Technical Specs for engineering handoff.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">&#129504;</div>
+                    <h3>AI-Powered Review</h3>
+                    <p>Get gap analysis, clarity scoring, and CPO-level feedback. Identify weak areas before stakeholder review.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">&#128101;</div>
+                    <h3>Collaboration</h3>
+                    <p>Built-in comments, approval workflows, and status management. Track blockers and get sign-off from stakeholders.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">&#128200;</div>
+                    <h3>Readiness Scoring</h3>
+                    <p>Automated readiness assessment tells you when a PRD is ready for development, with specific improvement suggestions.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">&#128230;</div>
+                    <h3>Export Anywhere</h3>
+                    <p>Export to Markdown for integration with your existing documentation tools, wikis, and version control.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="workflow" id="workflow">
+        <div class="container">
+            <div class="section-header">
+                <p class="section-label">Workflow</p>
+                <h2>From idea to shipped feature</h2>
+                <p class="section-description">
+                    A structured workflow that guides PRDs through review and approval to development.
+                </p>
+            </div>
+
+            <div class="workflow-steps">
+                <div class="workflow-step">
+                    <div class="step-number">1</div>
+                    <h3>Draft</h3>
+                    <p>Capture requirements through guided AI interview</p>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">2</div>
+                    <h3>Problem Review</h3>
+                    <p>Validate problem statement with stakeholders</p>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">3</div>
+                    <h3>Solution Review</h3>
+                    <p>Refine solution approach and get buy-in</p>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">4</div>
+                    <h3>Approved</h3>
+                    <p>Ready for engineering handoff</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="fleet" id="fleet">
+        <div class="container">
+            <div class="section-header">
+                <p class="section-label">Fleet Management</p>
+                <h2>Portfolio-scale PRD analytics</h2>
+                <p class="section-description">
+                    Manage dozens of PRDs with automated theme detection, prioritization, and health monitoring.
+                </p>
+            </div>
+
+            <div class="fleet-features">
+                <div class="fleet-item">
+                    <span class="fleet-item-icon">&#128202;</span>
+                    Portfolio health dashboard
+                </div>
+                <div class="fleet-item">
+                    <span class="fleet-item-icon">&#127919;</span>
+                    Auto-cluster PRDs into themes
+                </div>
+                <div class="fleet-item">
+                    <span class="fleet-item-icon">&#128269;</span>
+                    Duplicate detection
+                </div>
+                <div class="fleet-item">
+                    <span class="fleet-item-icon">&#128279;</span>
+                    Dependency analysis
+                </div>
+                <div class="fleet-item">
+                    <span class="fleet-item-icon">&#9201;</span>
+                    Stale PRD detection
+                </div>
+                <div class="fleet-item">
+                    <span class="fleet-item-icon">&#128200;</span>
+                    ICE/RICE/WSJF scoring
+                </div>
+                <div class="fleet-item">
+                    <span class="fleet-item-icon">&#127942;</span>
+                    OKR alignment scoring
+                </div>
+                <div class="fleet-item">
+                    <span class="fleet-item-icon">&#128172;</span>
+                    Natural language queries
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="container">
+            <h2>Start writing better PRDs today</h2>
+            <p>Open source and free to use. Built for product managers who ship.</p>
+            <a href="https://github.com/specwright/specwright" class="btn btn-primary">
+                View on GitHub
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <div class="install-code">
+                <code>npx specwright new</code>
+                <button class="copy-btn" onclick="navigator.clipboard.writeText('npx specwright new')" title="Copy to clipboard">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>Built with care by <a href="https://github.com/specwright">Specwright</a> &middot; <a href="https://github.com/specwright/specwright/blob/main/LICENSE">MIT License</a></p>
+        </div>
+    </footer>
+</body>
+</html>
