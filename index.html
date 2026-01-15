@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Specwright - AI-Powered PRD Generation</title>
-    <meta name="description" content="Create high-quality Product Requirements Documents with AI-guided interviews, intelligent review, and portfolio-scale analytics.">
+    <meta name="description" content="Create high-quality Product Requirements Documents with AI-guided interviews, intelligent review, and portfolio-scale analytics. Web app and CLI.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -13,6 +13,7 @@
             --bg-primary: #0a0a0b;
             --bg-secondary: #111113;
             --bg-tertiary: #18181b;
+            --bg-card: #141416;
             --text-primary: #fafafa;
             --text-secondary: #a1a1aa;
             --text-muted: #71717a;
@@ -20,8 +21,10 @@
             --accent-hover: #818cf8;
             --accent-glow: rgba(99, 102, 241, 0.4);
             --border: #27272a;
+            --border-light: #3f3f46;
             --success: #22c55e;
             --warning: #f59e0b;
+            --danger: #ef4444;
         }
 
         * {
@@ -44,6 +47,12 @@
 
         .container {
             max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .container-wide {
+            max-width: 1400px;
             margin: 0 auto;
             padding: 0 24px;
         }
@@ -141,6 +150,22 @@
             border-color: var(--text-muted);
         }
 
+        .btn-outline {
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
+
+        .btn-outline:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 0.8rem;
+        }
+
         /* Hero */
         .hero {
             min-height: 100vh;
@@ -157,17 +182,22 @@
             left: 50%;
             transform: translateX(-50%);
             width: 100%;
-            max-width: 800px;
-            height: 500px;
+            max-width: 1000px;
+            height: 600px;
             background: radial-gradient(ellipse at center, var(--accent-glow) 0%, transparent 70%);
             opacity: 0.3;
             pointer-events: none;
         }
 
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 64px;
+            align-items: center;
+            position: relative;
+        }
+
         .hero-content {
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto;
             position: relative;
         }
 
@@ -198,7 +228,7 @@
         }
 
         h1 {
-            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-size: clamp(2.25rem, 5vw, 3.5rem);
             font-weight: 700;
             line-height: 1.1;
             margin-bottom: 24px;
@@ -213,30 +243,290 @@
         }
 
         .hero-description {
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto 40px;
+            margin-bottom: 32px;
+            max-width: 500px;
         }
 
         .hero-buttons {
             display: flex;
             gap: 16px;
-            justify-content: center;
             flex-wrap: wrap;
         }
 
-        /* Terminal Preview */
+        .hero-screenshot {
+            position: relative;
+        }
+
+        .screenshot-wrapper {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border);
+        }
+
+        .screenshot-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .screenshot-placeholder {
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Product Toggle */
+        .product-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 48px;
+            padding: 6px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid var(--border);
+        }
+
+        .product-toggle-btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+
+        .product-toggle-btn.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .product-toggle-btn:hover:not(.active) {
+            color: var(--text-primary);
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 120px 0;
+        }
+
+        .section-alt {
+            background: var(--bg-secondary);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 16px;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+
+        .section-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent), #a855f7);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Screenshot Gallery */
+        .screenshot-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-top: 48px;
+        }
+
+        .screenshot-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .screenshot-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .screenshot-card-content {
+            padding: 20px;
+        }
+
+        .screenshot-card h4 {
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .screenshot-card p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Comparison Table */
+        .comparison-section {
+            padding: 120px 0;
+        }
+
+        .comparison-table-wrapper {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--bg-secondary);
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            min-width: 900px;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 16px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-table th {
+            background: var(--bg-tertiary);
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table td:first-child {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:hover td {
+            background: var(--bg-tertiary);
+        }
+
+        .check {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .partial {
+            color: var(--warning);
+        }
+
+        .cross {
+            color: var(--text-muted);
+        }
+
+        .highlight-row {
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .highlight-row td {
+            color: var(--text-primary);
+        }
+
+        .highlight-row td:first-child {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .price-tag {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* CLI Section */
+        .cli-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            align-items: center;
+        }
+
         .terminal {
             background: var(--bg-secondary);
             border: 1px solid var(--border);
             border-radius: 12px;
-            margin-top: 60px;
             overflow: hidden;
-            text-align: left;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
         }
 
         .terminal-header {
@@ -294,87 +584,32 @@
             color: var(--success);
         }
 
-        /* Features */
-        .features {
-            padding: 120px 0;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 64px;
-        }
-
-        .section-label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 16px;
-        }
-
-        h2 {
-            font-size: clamp(2rem, 4vw, 2.75rem);
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            margin-bottom: 16px;
-        }
-
-        .section-description {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .features-grid {
+        /* Fleet Features */
+        .fleet-features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 24px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            max-width: 800px;
+            margin: 48px auto 0;
         }
 
-        .feature-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 32px;
-            transition: all 0.3s;
-        }
-
-        .feature-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-4px);
-        }
-
-        .feature-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--accent), #a855f7);
-            border-radius: 12px;
+        .fleet-item {
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        .feature-card h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 12px;
-        }
-
-        .feature-card p {
-            color: var(--text-secondary);
+            gap: 12px;
+            padding: 16px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
             font-size: 0.95rem;
         }
 
-        /* Workflow */
-        .workflow {
-            padding: 120px 0;
-            background: var(--bg-secondary);
+        .fleet-item-icon {
+            color: var(--accent);
+            font-size: 1.1rem;
         }
 
+        /* Workflow */
         .workflow-steps {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -384,7 +619,6 @@
 
         .workflow-step {
             text-align: center;
-            position: relative;
         }
 
         .step-number {
@@ -413,40 +647,11 @@
             font-size: 0.9rem;
         }
 
-        /* Fleet */
-        .fleet {
-            padding: 120px 0;
-        }
-
-        .fleet-features {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-            max-width: 800px;
-            margin: 48px auto 0;
-        }
-
-        .fleet-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 16px 20px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            font-size: 0.95rem;
-        }
-
-        .fleet-item-icon {
-            color: var(--accent);
-            font-size: 1.1rem;
-        }
-
         /* CTA */
         .cta {
             padding: 120px 0;
             text-align: center;
-            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
         }
 
         .cta h2 {
@@ -462,6 +667,14 @@
             margin-right: auto;
         }
 
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 32px;
+        }
+
         .install-code {
             display: inline-flex;
             align-items: center;
@@ -472,7 +685,6 @@
             border-radius: 8px;
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.9rem;
-            margin-top: 24px;
         }
 
         .install-code code {
@@ -514,6 +726,32 @@
         }
 
         /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 48px;
+                text-align: center;
+            }
+
+            .hero-description {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .cli-section {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+
+            .screenshot-gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
@@ -530,6 +768,109 @@
             .fleet-features {
                 grid-template-columns: 1fr;
             }
+
+            .comparison-table-wrapper {
+                margin: 0 -24px;
+                border-radius: 0;
+                border-left: none;
+                border-right: none;
+            }
+        }
+
+        /* Notion-like aesthetic for web app screenshots */
+        .web-aesthetic {
+            background: #ffffff;
+            color: #37352f;
+        }
+
+        /* Research Section */
+        .research-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 64px;
+        }
+
+        .research-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+        }
+
+        .research-stat {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .research-label {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .research-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .research-card cite {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-style: normal;
+        }
+
+        .principles-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 40px;
+        }
+
+        .principles-section h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .principles-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+        }
+
+        .principle strong {
+            display: block;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .principle p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 1024px) {
+            .research-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .principles-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -541,10 +882,12 @@
                 Specwright
             </a>
             <div class="nav-links">
+                <a href="#research">Research</a>
                 <a href="#features">Features</a>
-                <a href="#workflow">How it works</a>
-                <a href="#fleet">Fleet Management</a>
-                <a href="https://github.com/specwright/specwright" class="btn btn-secondary">
+                <a href="#comparison">Compare</a>
+                <a href="#fleet">Fleet</a>
+                <a href="#cli">CLI</a>
+                <a href="https://github.com/specwright" class="btn btn-secondary">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
                     GitHub
                 </a>
@@ -553,64 +896,98 @@
     </nav>
 
     <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <div class="badge">
-                    <span class="badge-dot"></span>
-                    AI-Powered Documentation
-                </div>
-                <h1>Write PRDs that <span class="gradient-text">actually ship</span></h1>
-                <p class="hero-description">
-                    Specwright guides you through creating comprehensive Product Requirements Documents with AI-powered interviews, intelligent review, and portfolio-scale analytics.
-                </p>
-                <div class="hero-buttons">
-                    <a href="https://github.com/specwright/specwright" class="btn btn-primary">
-                        Get Started
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                    </a>
-                    <a href="#features" class="btn btn-secondary">See Features</a>
-                </div>
-
-                <div class="terminal">
-                    <div class="terminal-header">
-                        <span class="terminal-dot red"></span>
-                        <span class="terminal-dot yellow"></span>
-                        <span class="terminal-dot green"></span>
-                        <span class="terminal-title">Terminal</span>
+        <div class="container-wide">
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <div class="badge">
+                        <span class="badge-dot"></span>
+                        Web App + CLI
                     </div>
-                    <div class="terminal-body">
-                        <div class="terminal-line">
-                            <span class="terminal-prompt">$</span>
-                            <span class="terminal-command">specwright new --template standard-prd</span>
-                        </div>
-                        <div class="terminal-output">
-                            Starting guided interview for "User Authentication"...
-                        </div>
-                        <div class="terminal-output">
-                            <span class="terminal-success">&#10003;</span> Problem statement captured
-                        </div>
-                        <div class="terminal-output">
-                            <span class="terminal-success">&#10003;</span> Success metrics defined
-                        </div>
-                        <div class="terminal-output">
-                            <span class="terminal-success">&#10003;</span> Solution approach documented
-                        </div>
-                        <div class="terminal-output" style="margin-top: 8px;">
-                            PRD generated: <span style="color: var(--accent);">docs/auth-prd.md</span>
-                        </div>
+                    <h1>Write PRDs that <span class="gradient-text">actually ship</span></h1>
+                    <p class="hero-description">
+                        Specwright guides you through creating comprehensive Product Requirements Documents with AI-powered interviews, intelligent review, and portfolio-scale analytics.
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="#" class="btn btn-primary">
+                            Try the Web App
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </a>
+                        <a href="#cli" class="btn btn-secondary">View CLI</a>
+                    </div>
+                </div>
+                <div class="hero-screenshot">
+                    <div class="screenshot-wrapper">
+                        <img src="assets/templates.png" alt="Specwright Templates - Choose from Standard PRD, One-Pager, and Technical Spec templates" />
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="features" id="features">
+    <section class="section section-alt" id="research">
         <div class="container">
             <div class="section-header">
-                <p class="section-label">Features</p>
-                <h2>Everything you need for great PRDs</h2>
+                <p class="section-label">Research-Backed Design</p>
+                <h2>Built on what actually works</h2>
                 <p class="section-description">
-                    From initial idea capture to CPO-level review, Specwright covers the entire PRD lifecycle.
+                    Specwright's approach is grounded in requirements engineering research and validated by industry practice.
+                </p>
+            </div>
+
+            <div class="research-grid">
+                <div class="research-card">
+                    <div class="research-stat">40%</div>
+                    <div class="research-label">Productivity Increase</div>
+                    <p>McKinsey research shows PMs using AI-assisted documentation tools see 40% productivity gains, saving 6-9 hours weekly on specification work.</p>
+                    <cite>McKinsey & Company, 2024</cite>
+                </div>
+
+                <div class="research-card">
+                    <div class="research-stat">70%</div>
+                    <div class="research-label">Defects from Requirements</div>
+                    <p>IEEE studies consistently show 70% of software defects originate from requirements errors. Structured interviews reduce ambiguity at the source.</p>
+                    <cite>IEEE Software Engineering Standards</cite>
+                </div>
+
+                <div class="research-card">
+                    <div class="research-stat">3x</div>
+                    <div class="research-label">Cost Multiplier</div>
+                    <p>Requirements defects found post-development cost 3-6x more to fix than those caught during specification. Early review pays dividends.</p>
+                    <cite>Boehm & Basili, Software Defect Reduction</cite>
+                </div>
+            </div>
+
+            <div class="principles-section">
+                <h3>Design Principles from the Literature</h3>
+                <div class="principles-grid">
+                    <div class="principle">
+                        <strong>Problem-First Framing</strong>
+                        <p>Marty Cagan's SVPG methodology: validate the problem before investing in solutions. Our interview structure enforces this sequence.</p>
+                    </div>
+                    <div class="principle">
+                        <strong>Specification Completeness</strong>
+                        <p>Karl Wiegers' requirements checklists inform our gap analysis. Every PRD is evaluated against proven completeness criteria.</p>
+                    </div>
+                    <div class="principle">
+                        <strong>Spec-First Development</strong>
+                        <p>With AI coding assistants (Cursor, Claude Code), PRD quality directly impacts code quality. Better specs = better AI output.</p>
+                    </div>
+                    <div class="principle">
+                        <strong>Portfolio Coherence</strong>
+                        <p>Inspired by Teresa Torres' Opportunity Solution Trees. Fleet analytics surface duplicates, dependencies, and theme clusters across your roadmap.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="features">
+        <div class="container">
+            <div class="section-header">
+                <p class="section-label">Web App Features</p>
+                <h2>A beautiful interface for serious PRD work</h2>
+                <p class="section-description">
+                    Notion-like design meets purpose-built PRD tooling. No learning curve, immediate productivity.
                 </p>
             </div>
 
@@ -624,72 +1001,203 @@
                 <div class="feature-card">
                     <div class="feature-icon">&#128196;</div>
                     <h3>Multiple Templates</h3>
-                    <p>Choose from One-Pagers for quick validation, Standard PRDs for full specifications, or Technical Specs for engineering handoff.</p>
+                    <p>One-Pagers for quick validation, Standard PRDs for full specifications, or Technical Specs for engineering handoff. Each with tailored interview questions.</p>
                 </div>
 
                 <div class="feature-card">
                     <div class="feature-icon">&#129504;</div>
                     <h3>AI-Powered Review</h3>
-                    <p>Get gap analysis, clarity scoring, and CPO-level feedback. Identify weak areas before stakeholder review.</p>
+                    <p>Get gap analysis, clarity scoring, and CPO-level feedback. Identify weak areas before stakeholder review with specific improvement suggestions.</p>
                 </div>
 
                 <div class="feature-card">
                     <div class="feature-icon">&#128101;</div>
-                    <h3>Collaboration</h3>
-                    <p>Built-in comments, approval workflows, and status management. Track blockers and get sign-off from stakeholders.</p>
+                    <h3>Real-time Collaboration</h3>
+                    <p>Inline threaded comments, approval workflows, presence awareness, and activity feeds. Know who's viewing and get sign-off from stakeholders.</p>
                 </div>
 
                 <div class="feature-card">
                     <div class="feature-icon">&#128200;</div>
                     <h3>Readiness Scoring</h3>
-                    <p>Automated readiness assessment tells you when a PRD is ready for development, with specific improvement suggestions.</p>
+                    <p>Automated readiness assessment tells you when a PRD is ready for development. Track documents through Draft, Review, Approved, and Shipped states.</p>
                 </div>
 
                 <div class="feature-card">
                     <div class="feature-icon">&#128230;</div>
                     <h3>Export Anywhere</h3>
-                    <p>Export to Markdown for integration with your existing documentation tools, wikis, and version control.</p>
+                    <p>Export to Markdown, PDF, or Confluence. Your PRDs work with your existing documentation tools, wikis, and version control systems.</p>
+                </div>
+            </div>
+
+            <div class="screenshot-gallery">
+                <div class="screenshot-card">
+                    <img src="assets/templates.png" alt="Template Selection" />
+                    <div class="screenshot-card-content">
+                        <h4>Template Selection</h4>
+                        <p>Choose the right document type for your stage: exploration, specification, or engineering handoff.</p>
+                    </div>
+                </div>
+                <div class="screenshot-card">
+                    <img src="assets/fleet-dashboard.png" alt="Fleet Dashboard" />
+                    <div class="screenshot-card-content">
+                        <h4>Fleet Dashboard</h4>
+                        <p>Portfolio health at a glance: status distribution, document health, and items needing attention.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="workflow" id="workflow">
-        <div class="container">
+    <section class="section section-alt" id="comparison">
+        <div class="container-wide">
             <div class="section-header">
-                <p class="section-label">Workflow</p>
-                <h2>From idea to shipped feature</h2>
+                <p class="section-label">Why Specwright</p>
+                <h2>How we compare</h2>
                 <p class="section-description">
-                    A structured workflow that guides PRDs through review and approval to development.
+                    Purpose-built for PRDs without the enterprise complexity or ecosystem lock-in.
                 </p>
             </div>
 
-            <div class="workflow-steps">
-                <div class="workflow-step">
-                    <div class="step-number">1</div>
-                    <h3>Draft</h3>
-                    <p>Capture requirements through guided AI interview</p>
-                </div>
-                <div class="workflow-step">
-                    <div class="step-number">2</div>
-                    <h3>Problem Review</h3>
-                    <p>Validate problem statement with stakeholders</p>
-                </div>
-                <div class="workflow-step">
-                    <div class="step-number">3</div>
-                    <h3>Solution Review</h3>
-                    <p>Refine solution approach and get buy-in</p>
-                </div>
-                <div class="workflow-step">
-                    <div class="step-number">4</div>
-                    <h3>Approved</h3>
-                    <p>Ready for engineering handoff</p>
-                </div>
+            <div class="comparison-table-wrapper">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Specwright</th>
+                            <th>ChatPRD</th>
+                            <th>Chisel</th>
+                            <th>Productboard</th>
+                            <th>Notion AI</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="highlight-row">
+                            <td>Pricing</td>
+                            <td>Free / Open Source</td>
+                            <td class="price-tag">$15-24/mo</td>
+                            <td class="price-tag">$49/user/mo</td>
+                            <td class="price-tag">$228+/yr + AI add-on</td>
+                            <td class="price-tag">$20/user/mo</td>
+                        </tr>
+                        <tr>
+                            <td>AI-Guided PRD Creation</td>
+                            <td class="check">&#10003; Full</td>
+                            <td class="check">&#10003; Full</td>
+                            <td class="check">&#10003; Full</td>
+                            <td class="check">&#10003; Full</td>
+                            <td class="partial">~ Generic</td>
+                        </tr>
+                        <tr>
+                            <td>PRD-Specific Templates</td>
+                            <td class="check">&#10003; 3 types</td>
+                            <td class="check">&#10003; Multiple</td>
+                            <td class="check">&#10003; Custom</td>
+                            <td class="check">&#10003;</td>
+                            <td class="partial">~ Community</td>
+                        </tr>
+                        <tr>
+                            <td>Gap Analysis & Review</td>
+                            <td class="check">&#10003;</td>
+                            <td class="check">&#10003;</td>
+                            <td class="check">&#10003;</td>
+                            <td class="partial">~ Basic</td>
+                            <td class="cross">&#10007;</td>
+                        </tr>
+                        <tr>
+                            <td>Readiness Scoring</td>
+                            <td class="check">&#10003;</td>
+                            <td class="cross">&#10007;</td>
+                            <td class="partial">~</td>
+                            <td class="cross">&#10007;</td>
+                            <td class="cross">&#10007;</td>
+                        </tr>
+                        <tr>
+                            <td>Portfolio Analytics (Fleet)</td>
+                            <td class="check">&#10003; Full</td>
+                            <td class="cross">&#10007;</td>
+                            <td class="partial">~ Roadmaps</td>
+                            <td class="check">&#10003;</td>
+                            <td class="cross">&#10007;</td>
+                        </tr>
+                        <tr>
+                            <td>Theme Clustering</td>
+                            <td class="check">&#10003;</td>
+                            <td class="cross">&#10007;</td>
+                            <td class="cross">&#10007;</td>
+                            <td class="partial">~</td>
+                            <td class="cross">&#10007;</td>
+                        </tr>
+                        <tr>
+                            <td>Duplicate Detection</td>
+                            <td class="check">&#10003;</td>
+                            <td class="cross">&#10007;</td>
+                            <td class="cross">&#10007;</td>
+                            <td class="cross">&#10007;</td>
+                            <td class="cross">&#10007;</td>
+                        </tr>
+                        <tr>
+                            <td>ICE/RICE/WSJF Scoring</td>
+                            <td class="check">&#10003; All 3</td>
+                            <td class="cross">&#10007;</td>
+                            <td class="check">&#10003;</td>
+                            <td class="check">&#10003;</td>
+                            <td class="cross">&#10007;</td>
+                        </tr>
+                        <tr>
+                            <td>OKR Alignment</td>
+                            <td class="check">&#10003;</td>
+                            <td class="cross">&#10007;</td>
+                            <td class="partial">~</td>
+                            <td class="check">&#10003;</td>
+                            <td class="cross">&#10007;</td>
+                        </tr>
+                        <tr>
+                            <td>Natural Language Queries</td>
+                            <td class="check">&#10003;</td>
+                            <td class="cross">&#10007;</td>
+                            <td class="cross">&#10007;</td>
+                            <td class="check">&#10003;</td>
+                            <td class="check">&#10003;</td>
+                        </tr>
+                        <tr>
+                            <td>CLI Option</td>
+                            <td class="check">&#10003;</td>
+                            <td class="cross">&#10007;</td>
+                            <td class="cross">&#10007;</td>
+                            <td class="cross">&#10007;</td>
+                            <td class="cross">&#10007;</td>
+                        </tr>
+                        <tr>
+                            <td>Real-time Collaboration</td>
+                            <td class="check">&#10003;</td>
+                            <td class="check">&#10003;</td>
+                            <td class="check">&#10003;</td>
+                            <td class="check">&#10003;</td>
+                            <td class="check">&#10003;</td>
+                        </tr>
+                        <tr>
+                            <td>Self-Hosted Option</td>
+                            <td class="check">&#10003;</td>
+                            <td class="cross">&#10007;</td>
+                            <td class="cross">&#10007;</td>
+                            <td class="cross">&#10007;</td>
+                            <td class="cross">&#10007;</td>
+                        </tr>
+                        <tr>
+                            <td>Open Source</td>
+                            <td class="check">&#10003;</td>
+                            <td class="cross">&#10007;</td>
+                            <td class="cross">&#10007;</td>
+                            <td class="cross">&#10007;</td>
+                            <td class="cross">&#10007;</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </section>
 
-    <section class="fleet" id="fleet">
+    <section class="section" id="fleet">
         <div class="container">
             <div class="section-header">
                 <p class="section-label">Fleet Management</p>
@@ -736,14 +1244,155 @@
         </div>
     </section>
 
+    <section class="section section-alt" id="workflow">
+        <div class="container">
+            <div class="section-header">
+                <p class="section-label">Workflow</p>
+                <h2>From idea to shipped feature</h2>
+                <p class="section-description">
+                    A structured workflow that guides PRDs through review and approval to development.
+                </p>
+            </div>
+
+            <div class="workflow-steps">
+                <div class="workflow-step">
+                    <div class="step-number">1</div>
+                    <h3>Draft</h3>
+                    <p>Capture requirements through guided AI interview</p>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">2</div>
+                    <h3>Problem Review</h3>
+                    <p>Validate problem statement with stakeholders</p>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">3</div>
+                    <h3>Solution Review</h3>
+                    <p>Refine solution approach and get buy-in</p>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">4</div>
+                    <h3>Approved</h3>
+                    <p>Ready for engineering handoff</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="cli">
+        <div class="container">
+            <div class="section-header">
+                <p class="section-label">For Developers</p>
+                <h2>Prefer the command line?</h2>
+                <p class="section-description">
+                    Full-featured CLI for developers who live in the terminal. Same features, keyboard-driven workflow.
+                </p>
+            </div>
+
+            <div class="cli-section">
+                <div class="terminal">
+                    <div class="terminal-header">
+                        <span class="terminal-dot red"></span>
+                        <span class="terminal-dot yellow"></span>
+                        <span class="terminal-dot green"></span>
+                        <span class="terminal-title">Terminal</span>
+                    </div>
+                    <div class="terminal-body">
+                        <div class="terminal-line">
+                            <span class="terminal-prompt">$</span>
+                            <span class="terminal-command">specwright new --template standard-prd</span>
+                        </div>
+                        <div class="terminal-output">
+                            Starting guided interview for "User Authentication"...
+                        </div>
+                        <div class="terminal-output">
+                            <span class="terminal-success">&#10003;</span> Problem statement captured
+                        </div>
+                        <div class="terminal-output">
+                            <span class="terminal-success">&#10003;</span> Success metrics defined
+                        </div>
+                        <div class="terminal-output">
+                            <span class="terminal-success">&#10003;</span> Solution approach documented
+                        </div>
+                        <div class="terminal-output" style="margin-top: 8px;">
+                            PRD generated: <span style="color: var(--accent);">docs/auth-prd.md</span>
+                        </div>
+                        <div class="terminal-line" style="margin-top: 16px;">
+                            <span class="terminal-prompt">$</span>
+                            <span class="terminal-command">specwright fleet themes</span>
+                        </div>
+                        <div class="terminal-output">
+                            Analyzing 24 PRDs across portfolio...
+                        </div>
+                        <div class="terminal-output">
+                            <span style="color: var(--accent);">Theme 1:</span> Authentication & Security (6 PRDs)
+                        </div>
+                        <div class="terminal-output">
+                            <span style="color: var(--accent);">Theme 2:</span> User Experience (5 PRDs)
+                        </div>
+                        <div class="terminal-output">
+                            <span style="color: var(--accent);">Theme 3:</span> Performance (4 PRDs)
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Everything at your fingertips</h3>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 16px;">
+                        <li style="display: flex; align-items: flex-start; gap: 12px;">
+                            <span class="check">&#10003;</span>
+                            <div>
+                                <strong>Full feature parity</strong>
+                                <p style="color: var(--text-secondary); font-size: 0.9rem;">All web app features available from the terminal</p>
+                            </div>
+                        </li>
+                        <li style="display: flex; align-items: flex-start; gap: 12px;">
+                            <span class="check">&#10003;</span>
+                            <div>
+                                <strong>Git-friendly output</strong>
+                                <p style="color: var(--text-secondary); font-size: 0.9rem;">PRDs as Markdown files that version control naturally</p>
+                            </div>
+                        </li>
+                        <li style="display: flex; align-items: flex-start; gap: 12px;">
+                            <span class="check">&#10003;</span>
+                            <div>
+                                <strong>CI/CD integration</strong>
+                                <p style="color: var(--text-secondary); font-size: 0.9rem;">Automate PRD review and validation in your pipeline</p>
+                            </div>
+                        </li>
+                        <li style="display: flex; align-items: flex-start; gap: 12px;">
+                            <span class="check">&#10003;</span>
+                            <div>
+                                <strong>Local-first</strong>
+                                <p style="color: var(--text-secondary); font-size: 0.9rem;">Your data stays on your machine</p>
+                            </div>
+                        </li>
+                    </ul>
+                    <div style="margin-top: 32px;">
+                        <a href="https://github.com/specwright/specwright-cli" class="btn btn-outline">
+                            View CLI on GitHub
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="cta">
         <div class="container">
             <h2>Start writing better PRDs today</h2>
             <p>Open source and free to use. Built for product managers who ship.</p>
-            <a href="https://github.com/specwright/specwright" class="btn btn-primary">
-                View on GitHub
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary">
+                    Try the Web App
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="https://github.com/specwright" class="btn btn-secondary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    View on GitHub
+                </a>
+            </div>
             <div class="install-code">
                 <code>npx specwright new</code>
                 <button class="copy-btn" onclick="navigator.clipboard.writeText('npx specwright new')" title="Copy to clipboard">
@@ -755,7 +1404,7 @@
 
     <footer>
         <div class="container">
-            <p>Built with care by <a href="https://github.com/specwright">Specwright</a> &middot; <a href="https://github.com/specwright/specwright/blob/main/LICENSE">MIT License</a></p>
+            <p>Built with care by <a href="https://github.com/specwright">Specwright</a> &middot; <a href="https://github.com/specwright/specwright-cli/blob/main/LICENSE">MIT License</a></p>
         </div>
     </footer>
 </body>
